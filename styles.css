@@ -6,3 +6,8 @@
 .intro .intro-instruction{margin-top:12px;font-size:14px;color:var(--muted)}
 .animal{min-height:58px;flex-direction:row}
 @media(max-width:620px){.brand img{width:122px;max-height:42px}.animal{min-height:58px}}
+
+/* Prevent mobile browser focus zoom and horizontal page drift. */
+html,body{width:100%;max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.shell,.layout,.layout>*{min-width:0}
+@media(max-width:620px){.field input,.field select,.field textarea,.summary textarea{font-size:16px}.panel,.summary{min-width:0}}
