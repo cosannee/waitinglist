@@ -12,6 +12,57 @@
   const money = (amount) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(amount) + ' ₽';
   const text = (id) => $(id).value.trim();
   const valueOrLine = (value) => value || '—';
+  const draftKey = 'markovtoys-waitinglist-order-v1';
+  const draftFields = ['fullName', 'phone', 'height', 'weight', 'sex', 'toyColor', 'address', 'embroideryName'];
+
+  function setFabric(kind, number) {
+    selected[kind] = number;
+    $(kind + '-grid').querySelectorAll('button').forEach((button, index) => {
+      button.setAttribute('aria-pressed', String(index + 1 === number));
+    });
+    $(kind + '-choice').textContent = number
+      ? `№${number} · ${fabricNames[number - 1]}`
+      : 'Ткань не выбрана';
+  }
+
+  function saveDraft() {
+    const fields = Object.fromEntries(draftFields.map((id) => [id, $(id).value]));
+    const animal = form.querySelector('input[name="animal"]:checked')?.value || '';
+    const extras = { embroidery: $('embroidery').checked, hat: $('hat').checked, bow: $('bow').checked };
+    const hasData = Object.values(fields).some((value) => value.trim()) || animal ||
+      Object.values(extras).some(Boolean) || selected.outfit || selected.collar;
+    const draft = { version: 1, fields, animal, extras, fabrics: { ...selected } };
+    try {
+      if (hasData) localStorage.setItem(draftKey, JSON.stringify(draft));
+      else localStorage.removeItem(draftKey);
+      $('draft-status').textContent = hasData
+        ? 'Черновик сохранён на этом устройстве.'
+        : 'Данные сохранятся на этом устройстве автоматически.';
+    } catch {
+      $('draft-status').textContent = 'Браузер не разрешил сохранить черновик. Не закрывайте страницу до отправки.';
+    }
+  }
+
+  function restoreDraft() {
+    try {
+      const draft = JSON.parse(localStorage.getItem(draftKey) || 'null');
+      if (!draft || draft.version !== 1 || !draft.fields) return false;
+      for (const id of draftFields) {
+        if (typeof draft.fields[id] === 'string') $(id).value = draft.fields[id];
+      }
+      const animal = [...form.querySelectorAll('input[name="animal"]')]
+        .find((input) => input.value === draft.animal);
+      if (animal) animal.checked = true;
+      for (const id of ['embroidery', 'hat', 'bow']) $(id).checked = draft.extras?.[id] === true;
+      for (const kind of ['outfit', 'collar']) {
+        const number = draft.fabrics?.[kind];
+        if (Number.isInteger(number) && number >= 1 && number <= 12) setFabric(kind, number);
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  }
 
   for (const kind of ['outfit', 'collar']) {
     const grid = $(kind + '-grid');
@@ -23,9 +74,7 @@
       button.setAttribute('aria-label', `Ткань №${number}: ${fabricNames[number - 1]}`);
       button.innerHTML = `<img src="fabric-${String(number).padStart(2, '0')}.png" alt="" loading="lazy"><span>№${number}</span>`;
       button.addEventListener('click', () => {
-        selected[kind] = number;
-        grid.querySelectorAll('button').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-        $(kind + '-choice').textContent = `№${number} · ${fabricNames[number - 1]}`;
+        setFabric(kind, number);
         update();
       });
       grid.appendChild(button);
@@ -96,6 +145,7 @@
       : 'Стоимость зависит от веса малыша. Доступный диапазон — до 5500 г включительно.';
     $('copy-status').className = 'copy-status';
     $('copy-status').textContent = valid(order) ? 'Сообщение готово — скопируйте и отправьте его в чат.' : 'Заполните обязательные поля, чтобы скопировать заказ.';
+    saveDraft();
   }
 
   async function copyMessage() {
@@ -130,5 +180,15 @@
   form.addEventListener('change', update);
   form.addEventListener('submit', (event) => event.preventDefault());
   $('copy-button').addEventListener('click', copyMessage);
+  $('clear-draft').addEventListener('click', () => {
+    if (!window.confirm('Очистить все заполненные данные на этом устройстве?')) return;
+    form.reset();
+    setFabric('outfit', null);
+    setFabric('collar', null);
+    update();
+    $('draft-status').textContent = 'Черновик удалён с этого устройства.';
+  });
+  const restored = restoreDraft();
   update();
+  if (restored) $('draft-status').textContent = 'Черновик восстановлен. Можно продолжить оформление.';
 })();
