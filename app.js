@@ -21,7 +21,7 @@
       button.className = 'fabric-card';
       button.setAttribute('aria-pressed', 'false');
       button.setAttribute('aria-label', `Ткань №${number}: ${fabricNames[number - 1]}`);
-      button.innerHTML = `<img src="assets/fabric-${String(number).padStart(2, '0')}.png" alt="" loading="lazy"><span>№${number}</span>`;
+      button.innerHTML = `<img src="fabric-${String(number).padStart(2, '0')}.png" alt="" loading="lazy"><span>№${number}</span>`;
       button.addEventListener('click', () => {
         selected[kind] = number;
         grid.querySelectorAll('button').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
