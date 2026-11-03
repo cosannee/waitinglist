@@ -99,21 +99,20 @@
     const options = [];
     if (extras.embroidery) options.push(`Вышивка имени «${valueOrLine(order.embroideryName)}» — 400 ₽`);
     if (extras.hat) options.push('Праздничный колпачок — 300 ₽');
-    if (extras.bow) options.push('Повязка-бантик на голову — 200 ₽');
+    if (extras.bow) options.push('Повязка-бантик на голову (для девочек) — 200 ₽');
     return [
       'Здравствуйте! Хочу оформить заказ Markov Toys из листа ожидания 🤍', '',
       `ФИО: ${valueOrLine(order.fullName)}`,
       `Телефон: ${valueOrLine(order.phone)}`,
       `Мерки малыша: рост ${valueOrLine(order.height)} см, вес ${Number.isFinite(order.weight) && order.weight > 0 ? order.weight : '—'} г`,
       `Пол малыша: ${valueOrLine(order.sex)}`,
-      `Зверёк: ${valueOrLine(order.animal)}`,
+      `Игрушка: ${valueOrLine(order.animal)}`,
       `Цвет игрушки: ${valueOrLine(order.toyColor)}`,
       `Комбинезон: ткань ${order.selected.outfit ? `№${order.selected.outfit} (${fabricNames[order.selected.outfit - 1]})` : '—'}`,
       `Воротничок: ткань ${order.selected.collar ? `№${order.selected.collar} (${fabricNames[order.selected.collar - 1]})` : '—'}`,
       `Дополнения: ${options.length ? '\n— ' + options.join('\n— ') : 'нет'}`,
       `Доставка СДЭК: ${valueOrLine(order.address)}`, '',
-      `Игрушка с нарядом: ${price ? money(price.base) : '—'}`,
-      `Дополнения: ${price ? money(price.options) : '—'}`,
+      `Стоимость дополнений (включена в итог): ${price ? money(price.options) : '—'}`,
       `Итого: ${price ? money(price.total) : '—'}`,
       `Предоплата 30%: ${price ? money(price.deposit) : '—'}`,
       `Остаток после готовности: ${price ? money(price.balance) : '—'}`,
@@ -134,7 +133,6 @@
     $('embroideryName').required = $('embroidery').checked;
     const order = readOrder();
     const { price } = order;
-    $('base-price').textContent = price ? money(price.base) : '—';
     $('options-price').textContent = money((order.extras.embroidery ? 400 : 0) + (order.extras.hat ? 300 : 0) + (order.extras.bow ? 200 : 0));
     $('total-price').textContent = price ? money(price.total) : '—';
     $('deposit-price').textContent = price ? money(price.deposit) : '—';
