@@ -6,7 +6,9 @@
   const fabricNames = [
     'тёмно-пудровый', 'бежевый с сердечками', 'фисташковая полоска', 'фисташковый в мушку',
     'голубой батист', 'розовый в точку', 'жёлтый в мушку', 'молочный с сердечками',
-    'голубой воздушный', 'голубо-серый в точку', 'белый воздушный', 'молочный воздушный'
+    'голубой воздушный', 'голубо-серый в точку', 'белый воздушный', 'молочный воздушный',
+    'хлопковая ткань в клетку', 'бежевый жатый хлопок', 'коричневый воздушный муслин',
+    'прозрачная сетка фатин с блёстками'
   ];
   const selected = { outfit: null, collar: null };
   const money = (amount) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(amount) + ' ₽';
@@ -56,7 +58,7 @@
       for (const id of ['embroidery', 'hat', 'bow']) $(id).checked = draft.extras?.[id] === true;
       for (const kind of ['outfit', 'collar']) {
         const number = draft.fabrics?.[kind];
-        if (Number.isInteger(number) && number >= 1 && number <= 12) setFabric(kind, number);
+        if (Number.isInteger(number) && number >= 1 && number <= fabricNames.length) setFabric(kind, number);
       }
       return true;
     } catch {
@@ -66,7 +68,7 @@
 
   for (const kind of ['outfit', 'collar']) {
     const grid = $(kind + '-grid');
-    for (let number = 1; number <= 12; number++) {
+    for (let number = 1; number <= fabricNames.length; number++) {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'fabric-card';
