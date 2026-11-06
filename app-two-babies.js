@@ -185,7 +185,7 @@
       `Цвет игрушки: ${valueOrLine(baby.toyColor)}`,
       `Комбинезон: ткань ${baby.fabrics.outfit ? `№${baby.fabrics.outfit} (${fabricNames[baby.fabrics.outfit - 1]})` : '—'}`,
       `Воротничок: ткань ${baby.fabrics.collar ? `№${baby.fabrics.collar} (${fabricNames[baby.fabrics.collar - 1]})` : '—'}`,
-      `Дополнения: ${options.length ? '\n— ' + options.join('\n— ') : 'нет'}`
+      `Дополнения:${options.length ? '\n— ' + options.join('\n— ') : ' нет'}`
     );
     if (multiple) lines.push(`Итого за малыша ${index + 1}: ${baby.price ? money(baby.price.total) : '—'}`);
     return lines;
@@ -202,7 +202,7 @@
       lines.push(...babyLines(baby, index, order.babies.length > 1));
     });
     lines.push(
-      `Доставка СДЭК: ${valueOrLine(order.address)}`, '',
+      '', `Доставка СДЭК: ${valueOrLine(order.address)}`, '',
       `Стоимость дополнений (включена в итог): ${order.totals ? money(order.totals.options) : '—'}`,
       `Итого: ${order.totals ? money(order.totals.total) : '—'}`,
       `Предоплата 30%: ${order.totals ? money(order.totals.deposit) : '—'}`,
