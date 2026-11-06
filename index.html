@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=sketch-1">
+  <link rel="stylesheet" href="styles.css?v=two-babies-1">
 </head>
 <body>
   <header class="site-header"><div class="header-inner"><div class="brand"><img src="markov-logo.svg" alt="Markov Toys"></div><span class="header-note">Лист ожидания · оформление заказа</span></div></header>
@@ -38,6 +38,9 @@
         <section class="panel" aria-labelledby="heading-1"><div class="section-head"><span class="step">01</span><div><h2 id="heading-1">Контактные данные</h2><p>Чтобы мы могли связаться с вами по заказу</p></div></div>
           <div class="fields two"><label class="field"><span>ФИО <b>*</b></span><input id="fullName" name="fullName" autocomplete="name" required placeholder="Например, Иванова Анна Сергеевна"></label><label class="field"><span>Номер телефона <b>*</b></span><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="+7 999 123-45-67"></label></div>
         </section>
+
+        <label class="baby-toggle"><input id="second-baby-toggle" type="checkbox" aria-controls="second-baby"><span><strong>Заказ для двух малышей</strong><small>Мерки, игрушку, ткани и дополнения можно выбрать для каждого отдельно.</small></span></label>
+        <div id="first-baby-title" class="baby-title" hidden>Малыш 1</div>
 
         <section class="panel" aria-labelledby="heading-2"><div class="section-head"><span class="step">02</span><div><h2 id="heading-2">Первые мерки</h2><p>По ним мы рассчитаем стоимость игрушки</p></div></div>
           <div class="fields three"><label class="field"><span>Рост малыша, см <b>*</b></span><input id="height" name="height" type="number" min="1" max="150" step="0.1" inputmode="decimal" required placeholder="Например, 52"></label><label class="field"><span>Вес малыша, г <b>*</b></span><input id="weight" name="weight" type="number" min="1" step="1" inputmode="numeric" required placeholder="Например, 3200"></label><label class="field"><span>Пол малыша <b>*</b></span><select id="sex" name="sex" required><option value="">Выберите</option><option>Девочка</option><option>Мальчик</option></select></label></div>
@@ -65,14 +68,16 @@
           </div>
         </section>
 
+        <div id="second-baby" hidden><div class="baby-title">Малыш 2</div></div>
+
         <section class="panel" aria-labelledby="heading-6"><div class="section-head"><span class="step">06</span><div><h2 id="heading-6">Доставка</h2><p>Оплачивается отдельно при получении</p></div></div><label class="field"><span>Адрес доставки СДЭК <b>*</b></span><textarea id="address" name="address" required rows="3" placeholder="Город, адрес пункта выдачи или полный адрес доставки"></textarea></label></section>
       </form>
 
-      <aside class="summary" aria-labelledby="summary-heading"><div class="summary-top"><span class="summary-kicker">ВАШ ЗАКАЗ</span><h2 id="summary-heading">Детали заказа</h2><p>После заполнения формы скопируйте сообщение и отправьте его в наш чат.</p></div><div class="price-rows"><div><span>Стоимость дополнений</span><strong id="options-price">0 ₽</strong></div><div class="total-row"><span>Итого</span><strong id="total-price">—</strong></div></div><div class="deposit"><div><span>Предоплата · 30%</span><strong id="deposit-price">—</strong></div><p>Реквизиты пришлём после получения данных. Остаток — после готовности. Доставка СДЭК оплачивается при получении.</p></div><label class="preview-label" for="message-preview">Сообщение для чата</label><textarea id="message-preview" readonly rows="13" aria-label="Предпросмотр сообщения для чата"></textarea><button id="copy-button" class="copy-button" type="button">Скопировать сообщение <span aria-hidden="true">↗</span></button><p id="copy-status" class="copy-status" role="status" aria-live="polite">Заполните обязательные поля, чтобы скопировать заказ.</p><div class="draft-actions"><p id="draft-status" role="status" aria-live="polite">Данные сохранятся на этом устройстве автоматически.</p><button id="clear-draft" type="button">Очистить форму</button></div><a class="price-link" href="price-list.jpeg" target="_blank" rel="noopener">Посмотреть исходный прайс ↗</a></aside>
+      <aside class="summary" aria-labelledby="summary-heading"><div class="summary-top"><span class="summary-kicker">ВАШ ЗАКАЗ</span><h2 id="summary-heading">Детали заказа</h2><p>После заполнения формы скопируйте сообщение и отправьте его в наш чат.</p></div><div class="price-rows"><div id="baby1-price-row" hidden><span>Малыш 1, с дополнениями</span><strong id="baby1-price">—</strong></div><div id="baby2-price-row" hidden><span>Малыш 2, с дополнениями</span><strong id="baby2-price">—</strong></div><div><span>Стоимость дополнений</span><strong id="options-price">0 ₽</strong></div><div class="total-row"><span>Итого</span><strong id="total-price">—</strong></div></div><div class="deposit"><div><span>Предоплата · 30%</span><strong id="deposit-price">—</strong></div><p>Реквизиты пришлём после получения данных. Остаток — после готовности. Доставка СДЭК оплачивается при получении.</p></div><label class="preview-label" for="message-preview">Сообщение для чата</label><textarea id="message-preview" readonly rows="13" aria-label="Предпросмотр сообщения для чата"></textarea><button id="copy-button" class="copy-button" type="button">Скопировать сообщение <span aria-hidden="true">↗</span></button><p id="copy-status" class="copy-status" role="status" aria-live="polite">Заполните обязательные поля, чтобы скопировать заказ.</p><div class="draft-actions"><p id="draft-status" role="status" aria-live="polite">Данные сохранятся на этом устройстве автоматически.</p><button id="clear-draft" type="button">Очистить форму</button></div><a class="price-link" href="price-list.jpeg" target="_blank" rel="noopener">Посмотреть исходный прайс ↗</a></aside>
     </div>
     <footer>Markov Toys <span>·</span> Ваши первые мерки в нежных объятиях</footer>
   </main>
   <script src="pricing.js"></script>
-  <script src="app.js?v=message-2"></script>
+  <script src="app-two-babies.js?v=1"></script>
 </body>
 </html>

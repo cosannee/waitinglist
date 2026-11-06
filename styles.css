@@ -23,3 +23,13 @@ html,body{width:100%;max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100
 .extra-with-image .extra-price{grid-column:3;grid-row:2;justify-self:start;align-self:start;margin-top:4px}
 .extra-note{margin:3px 4px 0;color:var(--muted);font-size:11px;line-height:1.45}
 @media(max-width:620px){.extra-with-image{grid-template-columns:18px 88px minmax(0,1fr);column-gap:9px;padding:10px}.extra-with-image .extra-image{width:88px;height:88px}}
+
+.baby-toggle{display:flex;align-items:center;gap:13px;margin:0 0 16px;padding:17px 20px;border:1px solid var(--line);border-radius:16px;background:#f1f6f0;cursor:pointer}
+.baby-toggle:has(input:checked){border-color:var(--green);background:#eaf3e9}
+.baby-toggle input{width:20px;height:20px;flex:none;margin:0;accent-color:var(--green)}
+.baby-toggle span{display:flex;flex-direction:column;gap:3px;min-width:0}
+.baby-toggle strong{font-size:15px;line-height:1.3}
+.baby-toggle small{color:var(--muted);font-size:12px;line-height:1.4}
+.baby-title{margin:22px 2px 14px;color:var(--green-dark);font-size:18px;font-weight:700;letter-spacing:-.03em}
+#second-baby[hidden],.baby-title[hidden],.price-rows>div[hidden]{display:none}
+@media(max-width:620px){.baby-toggle{padding:15px 16px}.baby-toggle strong{font-size:14px}.baby-toggle small{font-size:11px}}
