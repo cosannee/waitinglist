@@ -19,6 +19,7 @@
     'хлопковая ткань в клетку', 'бежевый жатый хлопок', 'коричневый воздушный муслин',
     'прозрачная сетка фатин с блёстками'
   ];
+  const unavailableFabrics = new Set([5]);
   const selected = { outfit: null, collar: null, 'baby2-outfit': null, 'baby2-collar': null };
   const money = (amount) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(amount) + ' ₽';
   const text = (id) => $(id).value.trim();
@@ -47,8 +48,8 @@
 
   function setFabric(prefix, kind, number) {
     selected[prefix + kind] = number;
-    $(prefix + kind + '-grid').querySelectorAll('button').forEach((button, index) => {
-      button.setAttribute('aria-pressed', String(index + 1 === number));
+    $(prefix + kind + '-grid').querySelectorAll('button').forEach((button) => {
+      button.setAttribute('aria-pressed', String(Number(button.dataset.number) === number));
     });
     $(prefix + kind + '-choice').textContent = number
       ? `№${number} · ${fabricNames[number - 1]}`
@@ -59,9 +60,11 @@
     for (const kind of kinds) {
       const grid = $(prefix + kind + '-grid');
       for (let number = 1; number <= fabricNames.length; number++) {
+        if (unavailableFabrics.has(number)) continue;
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'fabric-card';
+        button.dataset.number = String(number);
         button.setAttribute('aria-pressed', 'false');
         button.setAttribute('aria-label', `Ткань №${number}: ${fabricNames[number - 1]}`);
         button.innerHTML = `<img src="fabric-${String(number).padStart(2, '0')}.png" alt="" loading="lazy"><span>№${number}</span>`;
@@ -133,7 +136,7 @@
       for (const prefix of prefixes) {
         for (const kind of kinds) {
           const number = draft.fabrics?.[prefix + kind];
-          if (Number.isInteger(number) && number >= 1 && number <= fabricNames.length) {
+          if (Number.isInteger(number) && number >= 1 && number <= fabricNames.length && !unavailableFabrics.has(number)) {
             setFabric(prefix, kind, number);
           }
         }
