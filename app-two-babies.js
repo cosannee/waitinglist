@@ -236,6 +236,7 @@
     for (const prefix of prefixes) {
       $(prefix + 'embroidery-field').hidden = !$(prefix + 'embroidery').checked;
       $(prefix + 'embroideryName').required = $(prefix + 'embroidery').checked;
+      $(prefix + 'white-toy-note').hidden = $(prefix + 'toyColor').value !== 'Белый';
     }
     const order = readOrder();
     const options = order.babies.reduce((sum, baby) => sum + extrasCost(baby.extras), 0);
